@@ -4,9 +4,37 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="style/style.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
 	<title>Trello Clone</title>
 </head>
 <body>
+	<div class="trello">
+
+		<div class="board">
+			<h3 class="board-item title" contenteditable='true'>Enter boards name</h3>
+
+			<div class="board-item list">
+				<div class="list-item" draggable='true'>First card</div>
+				<div class="list-item" draggable='true'>Todo smth</div>
+			</div>
+
+			<div class="board-item form">
+				<textarea class='form-textarea' rows='4' placeholder='Enter text'></textarea>
+				<div class="form-btns">
+					<button class="btn add_list_item_btn">Add</button>
+					<button class="btn cancel_btn">Cancel</button>
+				</div>
+			</div>
+			<button class="board-item btn add_item_btn">Add card</button>
+		</div>
+
+		
+	</div>
+	<button class="btn add_board_btn">Add board</button> 
 	<script src="script/main.js"></script>
 </body>
 </html>
