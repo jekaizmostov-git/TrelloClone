@@ -11,9 +11,10 @@ body{
 	background: #4B5F9B;
 }
 .trello{
-	
 	position: relative;
 	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
 	margin: 25px;
 }
 
@@ -23,6 +24,7 @@ body{
 	background-color: rgba(57, 60, 70, .6);
 	padding: 10px 15px 20px 15px;
 	margin-right: 15px;
+	margin-bottom: 15px;
 	border-radius: 4px;
 	width: 250px;
 	font-weight: 500;
@@ -53,6 +55,7 @@ body{
 	border-radius: 4px;
 	outline: none;
 	margin-bottom: 5px;
+	cursor: grab;
 }
 
 .list-item:last-child{
@@ -62,6 +65,7 @@ body{
 .form-btns{
 	margin-top: 5px;
 	display: flex;
+	/*flex-direction: row-reverse;*/
 	justify-content: space-between;
 }
 
@@ -70,6 +74,7 @@ body{
 	border: 1px solid black;
 	border-radius: 4px;
 	color: white;
+	cursor: pointer;
 }
 
 .btn:hover{
@@ -93,7 +98,7 @@ body{
 	background-color: #AA281E;
 }
 
-.add_item_btn{
+.add_listitem_btn{
 	border: 1px solid rgb(57,60,70);
 	font-weight: 300;
 	color: white;
@@ -101,7 +106,7 @@ body{
 	margin: 5px 10px 0px 10px;
 }
 
-.add_item_btn:active{
+.add_listitem_btn:active{
 	background-color: #2E3139;
 }
 
