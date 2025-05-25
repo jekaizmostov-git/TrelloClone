@@ -38,18 +38,23 @@ formTextArea.addEventListener('input', event => {
 	}
 })
 
-//Add card to board
-formAddListItemButton.addEventListener('click', event => {
+//creagte list-item/card element
+function createCard(parentNode,textContent){
 	const listItem = document.createElement('div')
 	listItem.classList.add('list-item')
 	listItem.setAttribute('draggable', 'true')
-	listItem.textContent = formTextArea.value
-	lists[0].appendChild(listItem)
+	listItem.textContent = textContent
+	parentNode.appendChild(listItem)	
+}
 
+//Add card to board
+formAddListItemButton.addEventListener('click', function(e) {
+	createCard(lists[0], formTextArea.value)
 	formTextArea.value = ''
 	form.style.display = 'none'
 	addListItemBtn.style.display = 'block'
 
+	loadBoardsToLocalStorage()
 })
 
 
@@ -59,16 +64,18 @@ trello.addEventListener('contextmenu', event => {
 	if (event.target.closest('.list-item')){
 		event.target.remove()
 	}
+
+	loadBoardsToLocalStorage()
 })
 
 //create new board on add_board_btn click
-function createBoard() {
+function createBoard(title, listItems = []) {
 	const board = document.createElement('div')
 	board.classList.add('board')
 
 	const h3 = document.createElement('h3')
 	h3.classList.add('board-item', 'title')	
-	h3.textContent = 'Enter boards name'
+	h3.textContent = title
 	h3.setAttribute('contenteditable', 'true')
 	board.appendChild(h3)
 
@@ -76,11 +83,20 @@ function createBoard() {
 	list.classList.add('board-item', 'list')
 	board.appendChild(list)
 
+	if (listItems.length > 0){
+		for (item of listItems){
+			createCard(list, item)
+		}
+	}
 
 	trello.appendChild(board)
-	console.log(board)
 }
-addBoardBtn.addEventListener('click', createBoard)
+
+
+addBoardBtn.addEventListener('click', function(e){
+	createBoard('Enter board name')
+	loadBoardsToLocalStorage()
+})
 
 //clear board title on click
 trello.addEventListener('click', event => {
@@ -89,8 +105,9 @@ trello.addEventListener('click', event => {
 		let title = event.target
 		title.textContent = ''
 	}
-})
 
+	loadBoardsToLocalStorage()
+})
 
 //min implementation to drag and drop for dinamyc created cards and boards
 trello.addEventListener('dragstart', handleDragStart)
@@ -135,12 +152,68 @@ function handleDrop(e) {
 		}
 	}
 
-	
+	loadBoardsToLocalStorage()
+	//console.log(JSON.parse(localStorage.getItem('dragAndDropApplication')))
 }
 
 document.addEventListener('dragend', event => {
 	if (dragItem){
 		dragItem = null
-		console.log('dragEnd')
 	}
 })
+
+const boardsToSerialize = []
+function serializeBoard(board, isFirst = false){
+	const title = board.querySelector('.title').textContent
+	const listItemsTextContents = []
+	board.querySelectorAll('.list-item').forEach( i => listItemsTextContents.push(i.textContent))
+	
+	return {
+		boardTitle: title,
+		listItems: listItemsTextContents,
+		first: isFirst
+	}
+}
+
+function loadBoardsToLocalStorage(){
+	boardsToSerialize.length = 0
+
+	document.querySelectorAll('.board').forEach(board => {
+		if (board.matches(':first-child')){
+			boardsToSerialize.push(serializeBoard(board, true))
+		} else {
+			boardsToSerialize.push(serializeBoard(board))
+		}
+	})
+	localStorage.setItem('dragAndDropApplication', JSON.stringify(boardsToSerialize))
+}
+
+function loadBoardsFromLocalStorage(){
+	const data = JSON.parse(localStorage.getItem('dragAndDropApplication'))
+	if (!data){
+		return
+	}
+
+	const firstBoard = document.querySelector('.board')
+	const dataForFirstBoard = data.filter(board => board.first)[0]
+	console.log(data.length)
+
+	if (dataForFirstBoard) {
+		firstBoard.querySelector('.title').textContent = dataForFirstBoard.boardTitle
+		const firstBoardList = firstBoard.querySelector('.list')
+		if (data.length > 1 || dataForFirstBoard.listItems.length > 1) {
+			firstBoardList.innerHTML = ''
+			for (item of dataForFirstBoard.listItems){
+				createCard(firstBoardList, item)
+			}
+		}
+	}
+
+	for (let i = 1; i < data.length; i++){
+		createBoard(data[i].boardTitle, data[i].listItems)
+	}
+
+}
+
+window.addEventListener('DOMContentLoaded', loadBoardsFromLocalStorage)
+
