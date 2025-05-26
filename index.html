@@ -14,13 +14,17 @@
 <body>
 	<div class="trello">
 
-		<div class="board">
+		<div class="board" removable='false'>
 			<h3 class="board-item title" contenteditable='true'>Click me to change title on this board</h3>
 
 			<div class="board-item list">
-				<div class="list-item" draggable="true">Right click to delete this card</div>
-				<div class="list-item" draggable="true">Todo smth</div>
+			<div class="list-item" draggable="true">Right click to delete this card</div>
+				<div class="list-item" draggable="true">Todo smth</div> 
 			</div>
+
+	<!-- 		<div class="board-item">
+				<p class='delete-board'>To delete empty board right click</p>
+			</div> -->
 
 			<div class="board-item form" style="display: none">
 				<textarea class='form-textarea' rows='4' placeholder='Enter text'></textarea>

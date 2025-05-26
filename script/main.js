@@ -58,13 +58,21 @@ formAddListItemButton.addEventListener('click', function(e) {
 })
 
 
-//delete card by right click 
+//delete card or block by right click 
 trello.addEventListener('contextmenu', event => {
 	event.preventDefault()
 	if (event.target.closest('.list-item')){
+		const board = event.target.parentNode.parentNode
 		event.target.remove()
+		boardIsEmpty(board)
+		return 
 	}
-
+	const board = findValidDropTarget(event.target)
+	// console.log(board)
+	if (board.querySelector('.delete-board')){
+		
+		board.remove()
+	}
 	loadBoardsToLocalStorage()
 })
 
@@ -88,7 +96,7 @@ function createBoard(title, listItems = []) {
 			createCard(list, item)
 		}
 	}
-
+	boardIsEmpty(board)
 	trello.appendChild(board)
 }
 
@@ -151,15 +159,22 @@ function handleDrop(e) {
 			dropZone.querySelector('.list').appendChild(dragItem)
 		}
 	}
-
 	loadBoardsToLocalStorage()
-	//console.log(JSON.parse(localStorage.getItem('dragAndDropApplication')))
+
+
+	document.querySelectorAll('.board').forEach(board => {
+		console.log(board)
+		boardIsEmpty(board)
+	})
+	
 }
 
 document.addEventListener('dragend', event => {
 	if (dragItem){
 		dragItem = null
 	}
+	
+
 })
 
 const boardsToSerialize = []
@@ -211,6 +226,37 @@ function loadBoardsFromLocalStorage(){
 
 	for (let i = 1; i < data.length; i++){
 		createBoard(data[i].boardTitle, data[i].listItems)
+	}
+
+}
+
+function addDeleteHintToBoard() {
+
+	const text = document.createElement('p')
+	text.classList.add('board-item')
+	text.classList.add('delete-board')
+	text.setAttribute('draggable', 'false')
+	text.textContent = 'Right click to del empty board'
+
+	return text
+}
+
+
+
+function boardIsEmpty(board) {
+	if (board.getAttribute('removable')) {
+		console.log('First')
+		return
+	}
+	if ((board.querySelector('.list').hasChildNodes() === false)){
+		if (board.querySelector('.delete-board') === null){
+			board.appendChild(addDeleteHintToBoard())
+		}
+	} else {
+		if (board.querySelector('.delete-board')) {
+			board.querySelector('.delete-board').remove()
+			console.log('Delete')
+		}
 	}
 
 }

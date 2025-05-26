@@ -136,3 +136,9 @@ body{
 .add_board_btn:active{
 	background-color: #2E3139;
 }
+
+.delete-board{
+	font-weight: 200;
+	text-align: center;
+	font-style: italic;
+}
