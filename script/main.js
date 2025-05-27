@@ -1,5 +1,5 @@
 const trello = document.querySelector('.trello')
-//const boards = document.querySelectorAll('.board')
+
 const addBoardBtn = document.querySelector('.add_board_btn')
 
 const addListItemBtn = document.querySelector('.add_listitem_btn')
@@ -30,10 +30,8 @@ formCancelButton.addEventListener('click', event => {
 //Show and hide add_btn by input state
 formTextArea.addEventListener('input', event => {
 	if (formTextArea.value === "") {
-		console.log('hidden')
 		formAddListItemButton.style.visibility = 'hidden'
 	} else {
-		console.log('visibly')
 		formAddListItemButton.style.visibility = 'visible'
 	}
 })
@@ -68,7 +66,6 @@ trello.addEventListener('contextmenu', event => {
 		return 
 	}
 	const board = findValidDropTarget(event.target)
-	// console.log(board)
 	if (board.querySelector('.delete-board')){
 		
 		board.remove()
@@ -163,7 +160,6 @@ function handleDrop(e) {
 
 
 	document.querySelectorAll('.board').forEach(board => {
-		console.log(board)
 		boardIsEmpty(board)
 	})
 	
@@ -173,10 +169,9 @@ document.addEventListener('dragend', event => {
 	if (dragItem){
 		dragItem = null
 	}
-	
-
 })
 
+//localStorage
 const boardsToSerialize = []
 function serializeBoard(board, isFirst = false){
 	const title = board.querySelector('.title').textContent
@@ -211,7 +206,6 @@ function loadBoardsFromLocalStorage(){
 
 	const firstBoard = document.querySelector('.board')
 	const dataForFirstBoard = data.filter(board => board.first)[0]
-	console.log(data.length)
 
 	if (dataForFirstBoard) {
 		firstBoard.querySelector('.title').textContent = dataForFirstBoard.boardTitle
@@ -230,8 +224,8 @@ function loadBoardsFromLocalStorage(){
 
 }
 
+//Add hint on empty board
 function addDeleteHintToBoard() {
-
 	const text = document.createElement('p')
 	text.classList.add('board-item')
 	text.classList.add('delete-board')
@@ -245,7 +239,6 @@ function addDeleteHintToBoard() {
 
 function boardIsEmpty(board) {
 	if (board.getAttribute('removable')) {
-		console.log('First')
 		return
 	}
 	if ((board.querySelector('.list').hasChildNodes() === false)){
@@ -255,7 +248,6 @@ function boardIsEmpty(board) {
 	} else {
 		if (board.querySelector('.delete-board')) {
 			board.querySelector('.delete-board').remove()
-			console.log('Delete')
 		}
 	}
 
